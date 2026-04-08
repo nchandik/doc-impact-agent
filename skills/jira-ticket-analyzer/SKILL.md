@@ -15,10 +15,16 @@ Activate this skill when you need to:
 
 ## Input
 
-Prompt the user for a **Bug/Story ID** (e.g., `OCTA-12345`).
+If the user has not already provided a ticket ID, prompt them with:
+
+> **What Jira ticket should I review?**
+>
+> Enter a Bug or Story ID (e.g., `OCTA-12345` or `CONT-27092`).
+> You can also paste a comma-separated list to review multiple tickets.
 
 If a ticket ID is provided, retrieve ticket details from Jira via MCP tools. If MCP is
-unavailable or the fetch is incomplete, ask the user to provide only the missing fields.
+unavailable or the fetch is incomplete, ask the user to provide only the missing fields
+(see "Handling Missing Fields" below).
 
 ## Required Fields
 
@@ -34,8 +40,18 @@ unavailable or the fetch is incomplete, ask the user to provide only the missing
 | **Component(s)** | e.g., ABL Compiler, PAS for OpenEdge, Database, OECC |
 | **Labels** | Any relevant labels |
 
-If critical fields are missing (especially versions and description), ask the user before
-proceeding.
+If critical fields are missing (especially versions and description), explain what's
+needed and why before asking:
+
+> **I'm missing some information I need to continue.**
+>
+> To search the right documentation and assess impact accurately, I need these fields
+> that weren't available in Jira:
+>
+> - **{field name}** — {why it's needed, e.g., "tells me which doc versions to check"}
+> - **{field name}** — {why it's needed}
+>
+> Can you provide these? You can paste the values or point me to where I can find them.
 
 ## Analysis Steps
 

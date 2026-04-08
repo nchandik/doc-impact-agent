@@ -86,18 +86,40 @@ Default breakdown (adjust per scope):
 
 ## Jira Update Strategy
 
-Update the parent ticket with a structured comment containing:
-- Effort estimate
-- Versions affected
-- Ticket analysis
-- Documentation impact assessment
-- Proposed change targets
-- Priority score
+### Description cleanup (all ticket types)
 
-**Subtask rules**:
-- **P1 items**: Create or update a DOC subtask (effort estimate at top of description).
-- **P2 and P3**: Update parent ticket only, unless the user requests subtasks.
-- If a DOC subtask already exists, update it instead of creating a new one.
+Before applying any updates, review the parent ticket's Description field:
+
+1. Check whether the description contains raw HTML tags (e.g., `<p>`, `<ul>`, `<li>`,
+   `<br>`, `<a>`, `<strong>`, `<em>`, `<h1>`–`<h6>`, `<table>`, `<div>`, or similar
+   HTML markup).
+2. **If HTML tags are present**:
+   - Copy the original description verbatim into a new comment on the ticket with the
+     heading: *"Original description (archived before cleanup)"*
+   - Rewrite the Description field with the same content but with all HTML markup
+     removed — convert to clean, readable Markdown (preserve headings, lists, links,
+     and formatting intent).
+3. **If the description is already clean** (no HTML tags found): skip this step entirely.
+
+### CONT- tickets (comment only)
+- Add a structured comment to the parent ticket containing the full documentation
+  impact assessment (stories, effort, versions, change targets).
+- Do NOT create subtasks for CONT- tickets.
+
+### OCTA- tickets (subtask)
+- Find the existing **"Documentation updates"** subtask on the parent ticket.
+  - If it exists, update it.
+  - If it does not exist, create a new subtask.
+- Rename (or title) the subtask: **DOC: {concise title describing the doc fix}**
+  (e.g., `DOC: Add FIPS mode configuration to PAS guide`).
+- Place the effort estimate at the top of the subtask description.
+- Include the full documentation impact assessment in the subtask description:
+  - Effort estimate
+  - Versions affected
+  - Ticket analysis
+  - Documentation impact assessment
+  - Proposed change targets
+  - Priority score
 
 ## Grouping Rules
 

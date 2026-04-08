@@ -29,18 +29,65 @@ include GitHub verification — it is optional.
 
 Use the **jira-ticket-analyzer** skill.
 
-1. Prompt for a Bug/Story ID if not provided.
+1. If the user has not already provided a ticket ID, prompt them with:
+
+   > **What Jira ticket should I review?**
+   >
+   > Enter a Bug or Story ID (e.g., `OCTA-12345` or `CONT-27092`).
+   > You can also paste a comma-separated list to review multiple tickets.
+
 2. Retrieve ticket details from Jira via MCP.
 3. Extract: what changed, technical scope, customer impact, keywords.
-4. Summarize in a "Ticket Analysis" section before proceeding.
+4. Present the "Ticket Analysis" section and then tell the user:
+
+   > **Here's what I found.** Review the analysis above. I'll now check the
+   > documentation for gaps.
+
+   If the ticket is eligible for GitHub verification (see Step 2), continue with:
+
+   > But first — would you like me to verify the implementation in GitHub? (next step)
+
+   If the ticket is NOT eligible, skip Step 2 automatically and say:
+
+   > **Note:** GitHub verification is not available for this ticket (see below).
+   > Moving on to documentation search.
 
 ### Step 2 — Verify Implementation in GitHub (Optional)
 
 Use the **github-verifier** skill.
 
-1. Ask the user whether to include this step.
+**Eligibility check** — evaluate BEFORE prompting:
+- **OCTA-** prefixed tickets: eligible. These reference the `Progress-OpenEdge` GitHub org.
+- **CONT-** prefixed tickets (and other non-OCTA prefixes): **not eligible**. These
+  tickets do not contain Git location references. Skip this step automatically and note
+  in the output: *"GitHub verification skipped — not available for {prefix} tickets."*
+- Even for eligible tickets, not all team members have access to the required GitHub
+  repositories. If a GitHub search fails with a permissions error, report it clearly
+  and continue to Step 3.
+
+1. For eligible tickets, prompt the user with a clear explanation and options:
+
+   > **Optional: Verify implementation in GitHub?**
+   >
+   > I can search the `Progress-OpenEdge` GitHub repos to confirm the changes
+   > described in this ticket were actually implemented. This checks for matching
+   > commits, PRs, and branches — and flags any discrepancies between the ticket
+   > and the code.
+   >
+   > **Note:** This requires access to the Progress-OpenEdge GitHub org. If you
+   > don't have access, choose No and I'll proceed with the documentation review.
+   >
+   > - **Yes** — search GitHub before reviewing docs (adds a few minutes)
+   > - **No** — skip this and go straight to documentation review
+   >
+   > Type **yes** or **no**.
+
 2. If opted in, search Progress-OpenEdge repos for evidence.
 3. Report repos, PRs, commits, discrepancies.
+4. After completing (or skipping), tell the user:
+
+   > **Moving on to documentation search.** I'll now search docs.progress.com for
+   > each affected version. This may take a moment.
 
 ### Step 3 — Search Documentation
 
@@ -67,7 +114,14 @@ Use the **doc-story-generator** skill.
 1. For each documentation gap, generate a story using the standard format.
 2. Score each story using the impact scoring matrix.
 3. Estimate effort using the estimation framework.
-4. Recommend Jira update action (comment vs. subtask) based on priority.
+4. **Description cleanup**: Check the parent ticket's Description for HTML tags
+   (e.g., `<p>`, `<ul>`, `<li>`, `<br>`, `<a>`, etc.).
+   If found, copy the original to a comment and rewrite the Description as clean
+   Markdown. If already clean, skip.
+5. Recommend Jira update action based on ticket prefix:
+   - **CONT-** tickets → format output as a comment to add to the parent ticket (no subtask).
+   - **OCTA-** tickets → update or create a subtask titled **DOC: {title for fix}**
+     (find existing "Documentation updates" subtask first; create only if none exists).
 
 ## Output Structure
 
@@ -95,6 +149,17 @@ Use the **doc-story-generator** skill.
 - Documentation areas impacted: {list of topic areas}
 - Implementation verified: {Yes/No/Partial}
 ```
+
+After presenting the full output, prompt the user with next-step options:
+
+> **Review complete.** Here's what you can do next:
+>
+> 1. **Process another ticket** — give me another Bug/Story ID
+> 2. **Adjust results** — ask me to rescore a story, change effort estimates, or add/remove a story
+> 3. **Post to Jira** — I can add the impact comment to the parent ticket and create DOC subtasks for P1 items
+> 4. **Export** — I can format the results as a table, CSV, or paste-ready text for an email
+>
+> What would you like to do?
 
 ## Important Guidelines
 

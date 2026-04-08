@@ -12,6 +12,23 @@ Activate this skill when you need to:
 - Find commits, PRs, or branches related to a ticket ID
 - Compare what was planned (ticket) vs. what was built (code)
 
+## Eligibility
+
+This skill only applies to tickets that have GitHub traceability:
+
+| Ticket Prefix | Eligible? | Reason |
+|---|---|---|
+| **OCTA-** | Yes | References Progress-OpenEdge GitHub repos |
+| **CONT-** | No | No Git location in ticket |
+| Other prefixes | No | Assume no Git traceability unless confirmed otherwise |
+
+If the ticket is not eligible, skip this skill entirely and note:
+*"GitHub verification skipped — not available for {prefix} tickets."*
+
+**Access note**: Not all team members have access to the Progress-OpenEdge GitHub
+repositories. If a search fails due to permissions, report the error clearly and
+allow the workflow to continue without verification.
+
 ## GitHub Organization
 
 Default target: **Progress-OpenEdge** on GitHub.com (`github.com/Progress-OpenEdge`).
