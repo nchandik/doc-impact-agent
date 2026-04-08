@@ -95,7 +95,7 @@ mode support.
 | Version | Documentation Hub |
 |---|---|
 | 12.2 | docs.progress.com/category/openedge122 |
-| 12.8 | docs.progress.com/category/openedge-information-hub |
+| 12.8 | docs.progress.com/category/openedge128 |
 | 13.0 | docs.progress.com/category/openedge |
 
 ## Adding New Versions

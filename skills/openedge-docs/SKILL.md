@@ -26,7 +26,7 @@ Activate this skill when you need to:
 | Version | Category URL | Bundle Suffix | Search Scope |
 |---|---|---|---|
 | **12.2** | `docs.progress.com/category/openedge122` | `-122` | `site:docs.progress.com openedge 12.2` |
-| **12.8** | `docs.progress.com/category/openedge-information-hub` | none or `-128` | `site:docs.progress.com openedge 12.8` |
+| **12.8** | `docs.progress.com/category/openedge128` | none or `-128` | `site:docs.progress.com openedge 12.8` |
 | **13.0** | `docs.progress.com/category/openedge` | `-13` | `site:docs.progress.com openedge 13.0` |
 
 ## Bundle Name Patterns

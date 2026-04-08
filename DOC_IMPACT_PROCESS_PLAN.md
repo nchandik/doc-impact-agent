@@ -116,7 +116,7 @@ This workflow mirrors the existing doc-impact-reviewer agent behavior.
 
 ## 5. Version Coverage Rules
 - 12.2: docs.progress.com/category/openedge122
-- 12.8: docs.progress.com/category/openedge-information-hub
+- 12.8: docs.progress.com/category/openedge128
 - 13.0: docs.progress.com/category/openedge
 
 Rule: assess each listed version independently; do not assume parity across versions.
