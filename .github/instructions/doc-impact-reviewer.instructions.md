@@ -25,6 +25,10 @@ details; this file defines the workflow, output structure, and guidelines only.
 Follow these steps in order. Ask the user before starting Step 2 whether they want to
 include GitHub verification — it is optional.
 
+Default execution mode: **auto-post**. After generating the final documentation impact
+assessment, automatically add the result to Jira without asking for extra confirmation.
+The default target is the ticket being reviewed.
+
 ### Step 1 — Analyze the Ticket
 
 Use the **jira-ticket-analyzer** skill.
@@ -119,9 +123,21 @@ Use the **doc-story-generator** skill.
    If found, copy the original to a comment and rewrite the Description as clean
    Markdown. If already clean, skip.
 5. Recommend Jira update action based on ticket prefix:
-   - **CONT-** tickets → format output as a comment to add to the parent ticket (no subtask).
+  - **CONT-** tickets → format output as a comment to add to the current ticket under review (no subtask). If the user explicitly asks for parent-only posting, post to parent.
    - **OCTA-** tickets → update or create a subtask titled **DOC: {title for fix}**
      (find existing "Documentation updates" subtask first; create only if none exists).
+
+### Step 6 — Post To Jira Automatically (Default)
+
+1. After preparing the final output, post it automatically via Jira MCP tools.
+2. Posting target:
+  - Default: current ticket under review (for example, `CONT-27754`).
+  - If the user explicitly requests parent-only posting, post to the parent instead.
+3. For **CONT-** tickets, post the full documentation impact assessment as a ticket comment.
+4. For **OCTA-** tickets, follow Step 5 Jira strategy (update/create doc subtask) and also
+  add a short summary comment on the parent ticket with links/references.
+5. If posting fails because of permissions or connectivity, continue and report the exact
+  error plus a paste-ready comment body.
 
 ## Output Structure
 
@@ -150,13 +166,13 @@ Use the **doc-story-generator** skill.
 - Implementation verified: {Yes/No/Partial}
 ```
 
-After presenting the full output, prompt the user with next-step options:
+After presenting the full output, report posting status and then prompt with next-step options:
 
-> **Review complete.** Here's what you can do next:
+> **Review complete and posted to Jira.**
 >
 > 1. **Process another ticket** — give me another Bug/Story ID
 > 2. **Adjust results** — ask me to rescore a story, change effort estimates, or add/remove a story
-> 3. **Post to Jira** — I can add the impact comment to the parent ticket and create DOC subtasks for P1 items
+> 3. **Repost** — I can post an updated version to the same ticket or parent ticket
 > 4. **Export** — I can format the results as a table, CSV, or paste-ready text for an email
 >
 > What would you like to do?
